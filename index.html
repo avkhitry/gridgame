@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8"> <!-- Specify UTF-8 character encoding -->
+    <title>Kim's Game</title>
+    <style>
+        #gameCanvas {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+            /* Space between game canvas and symbol bar */
+        }
+
+        .symbol {
+            font-size: 36px;
+            cursor: grab;
+            position: absolute;
+            /* Absolute positioning for symbols in gameCanvas */
+            user-select: none;
+            /* Disables text selection */
+
+        }
+
+        #symbolBar {
+            display: flex;
+            flex-wrap: nowrap;
+            /* Prevent symbols from wrapping */
+            overflow-x: auto;
+            /* Allow horizontal scrolling if symbols exceed width */
+            align-items: center;
+            justify-content: flex-start;
+            /* Align symbols to the start */
+            width: 600px;
+            margin-top: 10px;
+            padding-right: 100px;
+            /* Extra space for the 'Check' button */
+        }
+
+        #symbolBar .symbol {
+            position: relative;
+            /* Relative positioning within symbolBar */
+            margin-right: 10px;
+            /* Space between symbols */
+            user-select: none;
+            /* Disables text selection */
+
+        }
+
+        #checkButton {
+            margin-top: 10px;
+            margin-left: 10px;
+            user-select: none;
+            /* Disables text selection */
+
+        }
+
+        #message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border: 1px solid #000;
+            z-index: 1001;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div id="gameCanvas"></div>
+    <div id="symbolBar"></div>
+    <button id="checkButton">Check</button>
+    <div id="message"></div>
+    <script src="kimsgame.js"></script>
+</body>
+
+</html>
