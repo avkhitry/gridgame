@@ -1,4 +1,6 @@
 let checkSymbols; // Declare checkSymbols globally
+let successfulRounds = 0; // Global variable for tracking successful rounds
+
 document.addEventListener('DOMContentLoaded', function () {
     const symbols = ['☂', '☘', '☸', '♥', '♨'];
     let symbolPositions = [];
@@ -129,11 +131,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (success) {
-            messageDiv.innerText = "Correct! Level Up!";
-            currentLevel++;
+            successfulRounds++;
+            if (successfulRounds >= 10) {
+                // Level up after ten successful rounds
+                alert("Level Up!");
+                currentLevel++;
+                successfulRounds = 0; // Reset the counter
+            } else {
+                alert(`Correct! ${10 - successfulRounds} more to level up.`);
+            }
         } else {
-            messageDiv.innerText = "Incorrect. Try Again!";
+            alert("Incorrect. Try Again!");
+            successfulRounds = 0; // Reset the counter on failure
         }
+
+        
         messageDiv.style.display = 'block';
 
         // Hide the message after a few seconds
