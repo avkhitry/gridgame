@@ -134,14 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
             successfulRounds++;
             if (successfulRounds >= 10) {
                 // Level up after ten successful rounds
-                alert("Level Up!");
+                messageDiv.innerText = "Level Up!";
                 currentLevel++;
                 successfulRounds = 0; // Reset the counter
             } else {
-                alert(`Correct! ${10 - successfulRounds} more to level up.`);
+                messageDiv.innerText = `Correct! ${10 - successfulRounds} more to level up.`;
             }
         } else {
-            alert("Incorrect. Try Again!");
+            messageDiv.innerText = "Incorrect. Try Again!";
             successfulRounds = 0; // Reset the counter on failure
         }
 
