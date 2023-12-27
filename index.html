@@ -9,8 +9,8 @@
             grid-template-rows: repeat(10, 1fr);
             width: 90vw;
             height: 90vh;
-            max-width: 600px; /* Adjust maximum size as needed */
-            max-height: 600px; /* Adjust maximum size as needed */
+            max-width: 600px;
+            max-height: 600px;
             margin: 0 auto;
         }
 
@@ -19,19 +19,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3vw; /* Adjust font size based on viewport width */
+            font-size: 3vw;
         }
 
-        .red { background-color: #ffcccc; } /* Pale red */
-        .orange { background-color: #ffe5cc; } /* Pale orange */
-        .yellow { background-color: #ffffcc; } /* Pale yellow */
-        .green { background-color: #ccffcc; } /* Pale green */
-        .blue { background-color: #ccccff; } /* Pale blue */
-        .deepblue { background-color: #ccccff; } /* Pale deep blue */
-        .violet { background-color: #f2ccff; } /* Pale violet */
+        .red { background-color: #ffcccc; }
+        .orange { background-color: #ffe5cc; }
+        .yellow { background-color: #ffffcc; }
+        .green { background-color: #ccffcc; }
+        .blue { background-color: blue; }
+        .deepblue { background-color: #ccccff; }
+        .violet { background-color: #f2ccff; }
         .black { background-color: black; color: white; }
-        .white { background-color: #f2f2f2; } /* Pale white */
-        .nocolor { background-color: #ffe6f0; } /* Pale pink for 'no color' */
+        .white { background-color: #f2f2f2; }
+        .nocolor { background-color: #ffe6f0; }
 
         #overlay {
             position: absolute;
@@ -51,17 +51,17 @@
             const grid = document.getElementById('grid');
             const overlay = document.getElementById('overlay');
             let tapCount = 0;
-            let symbols = ["🌐", "🔬", "🪢", "⌚", "♟️", "🪗", "🍵", "🌂", "👓", "✒️"];
+            let symbols = ["✒️", "👓", "🌂", "🍵", "🪗", "♟️", "⌚", "🪢", "🔬", "🌐"];
             let colors = ["red", "orange", "yellow", "green", "blue", "deepblue", "violet", "black", "white", "nocolor"];
             let selectedCell = null;
 
             function initializeGrid() {
                 grid.innerHTML = '';
-                for (let i = 99; i >= 0; i--) {
+                for (let i = 0; i < 100; i++) {
                     const cell = document.createElement('div');
                     cell.classList.add('cell', colors[i % 10]);
-                    if (i % 10 === 0) {
-                        cell.textContent = symbols[Math.floor(i / 10)];
+                    if (Math.floor(i / 10) === 9) {
+                        cell.textContent = symbols[i % 10];
                     }
                     grid.appendChild(cell);
                 }
@@ -77,21 +77,20 @@
 
             function colorRandomCell() {
                 const index = Math.floor(Math.random() * 100);
-                const cell = grid.children[99 - index];
+                const cell = grid.children[index];
                 cell.classList.add('black'); // Color the cell in black
-                selectedCell = { element: cell, row: 9 - Math.floor(index / 10), col: index % 10 };
+                selectedCell = { element: cell, row: Math.floor(index / 10), col: index % 10 };
             }
 
             function showSymbolInCell() {
                 const { element, row, col } = selectedCell;
-                element.textContent = symbols[9 - row];
-                // Use the original column color for the symbol
+                element.textContent = symbols[col];
                 element.classList.add(colors[col]);
             }
 
             function showOverlayMessage() {
                 const { row, col } = selectedCell;
-                overlay.textContent = `${colors[col]} ${symbols[9 - row]}`;
+                overlay.textContent = `${colors[col]} ${symbols[col]}`;
                 overlay.style.display = 'block';
             }
 
