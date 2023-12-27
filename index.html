@@ -29,7 +29,7 @@
         .violet { background-color: violet; }
         .black { background-color: black; color: white; }
         .white { background-color: white; }
-        .nocolor { background-color: transparent; }
+        .nocolor { background-color: pink; }
 
         #overlay {
             position: absolute;
@@ -77,7 +77,7 @@
                 const index = Math.floor(Math.random() * 100);
                 const cell = grid.children[index];
                 cell.classList.add(colors[index % 10]);
-                selectedCell = { element: cell, row: Math.floor(index / 10), col: index % 10 };
+                selectedCell = { element: cell, row: Math.floor(index / 10), col: 8 };
             }
 
             function showSymbolInCell() {
