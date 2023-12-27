@@ -1,84 +1,122 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8"> <!-- Specify UTF-8 character encoding -->
-    <title>Kim's Game</title>
+    <title>Color Grid Game</title>
     <style>
-        #gameCanvas {
-            position: relative;
-            width: 600px;
-            height: 400px;
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+            gap: 2px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
             border: 1px solid black;
-            margin-bottom: 10px;
-            /* Space between game canvas and symbol bar */
-        }
-
-        .symbol {
-            font-size: 36px;
-            cursor: grab;
-            position: absolute;
-            /* Absolute positioning for symbols in gameCanvas */
-            user-select: none;
-            /* Disables text selection */
-
-        }
-
-        #symbolBar {
             display: flex;
-            flex-wrap: nowrap;
-            /* Prevent symbols from wrapping */
-            overflow-x: auto;
-            /* Allow horizontal scrolling if symbols exceed width */
             align-items: center;
-            justify-content: flex-start;
-            /* Align symbols to the start */
-            width: 600px;
-            margin-top: 10px;
-            padding-right: 100px;
-            /* Extra space for the 'Check' button */
+            justify-content: center;
+            font-size: 20px;
         }
 
-        #symbolBar .symbol {
-            position: relative;
-            /* Relative positioning within symbolBar */
-            margin-right: 10px;
-            /* Space between symbols */
-            user-select: none;
-            /* Disables text selection */
+        .red { background-color: red; }
+        .orange { background-color: orange; }
+        .yellow { background-color: yellow; }
+        .green { background-color: green; }
+        .blue { background-color: blue; }
+        .deepblue { background-color: darkblue; }
+        .violet { background-color: violet; }
+        .black { background-color: black; color: white; }
+        .white { background-color: white; }
+        .nocolor { background-color: transparent; }
 
-        }
-
-        #checkButton {
-            margin-top: 10px;
-            margin-left: 10px;
-            user-select: none;
-            /* Disables text selection */
-
-        }
-
-        #message {
-            display: none;
-            position: fixed;
+        #overlay {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border: 1px solid #000;
-            z-index: 1001;
+            font-size: 24px;
+            display: none;
         }
     </style>
-
-
 </head>
-
 <body>
-    <div id="gameCanvas"></div>
-    <div id="symbolBar"></div>
-    <button id="checkButton">Check</button>
-    <div id="message"></div>
-    <script src="kimsgame.js"></script>
-</body>
+    <div id="grid"></div>
+    <div id="overlay"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const grid = document.getElementById('grid');
+            const overlay = document.getElementById('overlay');
+            let tapCount = 0;
+            let symbols = ["✒️", "👓", "🌂", "🍵", "🪗", "♟️", "⌚", "🪢", "🔬", "🌐"];
+            let colors = ["red", "orange", "yellow", "green", "blue", "deepblue", "violet", "black", "white", "nocolor"];
+            let selectedCell = null;
 
+            function initializeGrid() {
+                grid.innerHTML = '';
+                for (let i = 0; i < 100; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell', colors[i % 10]);
+                    if (i % 10 === 0) {
+                        cell.textContent = symbols[Math.floor(i / 10)];
+                    }
+                    grid.appendChild(cell);
+                }
+            }
+
+            function clearGrid() {
+                const cells = grid.querySelectorAll('.cell');
+                cells.forEach(cell => {
+                    cell.className = 'cell';
+                    cell.textContent = '';
+                });
+            }
+
+            function colorRandomCell() {
+                const index = Math.floor(Math.random() * 100);
+                const cell = grid.children[index];
+                cell.classList.add(colors[index % 10]);
+                selectedCell = { element: cell, row: Math.floor(index / 10), col: index % 10 };
+            }
+
+            function showSymbolInCell() {
+                const { element, row, col } = selectedCell;
+                element.textContent = symbols[row];
+                element.classList.add(colors[col]);
+            }
+
+            function showOverlayMessage() {
+                const { row, col } = selectedCell;
+                overlay.textContent = `${colors[col]} ${symbols[row]}`;
+                overlay.style.display = 'block';
+            }
+
+            grid.addEventListener('click', function() {
+                tapCount++;
+                switch(tapCount) {
+                    case 1:
+                        clearGrid();
+                        break;
+                    case 2:
+                        colorRandomCell();
+                        break;
+                    case 3:
+                        showSymbolInCell();
+                        break;
+                    case 4:
+                        showOverlayMessage();
+                        break;
+                    case 5:
+                        overlay.style.display = 'none';
+                        tapCount = 0;
+                        initializeGrid();
+                        break;
+                }
+            });
+
+            initializeGrid();
+        });
+    </script>
+</body>
 </html>
