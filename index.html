@@ -26,8 +26,8 @@
         .orange { background-color: #ffe5cc; }
         .yellow { background-color: #ffffcc; }
         .green { background-color: #ccffcc; }
-        .blue { background-color: #afeeee; }
-        .deepblue { background-color: #ccccff; }
+        .blue { background-color: #ccccff; }
+        .deepblue { background-color: #5494da; }
         .violet { background-color: #f2ccff; }
         .black { background-color: black; color: white; }
         .white { background-color: #f2f2f2; }
@@ -57,13 +57,15 @@
 
             function initializeGrid() {
                 grid.innerHTML = '';
-                for (let i = 0; i < 100; i++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell', colors[i % 10]);
-                    if (Math.floor(i / 10) === 9) {
-                        cell.textContent = symbols[i % 10];
+                for (let row = 9; row >= 0; row--) {
+                    for (let col = 0; col < 10; col++) {
+                        const cell = document.createElement('div');
+                        cell.classList.add('cell', colors[col]);
+                        if (col === 0) {
+                            cell.textContent = symbols[row];
+                        }
+                        grid.appendChild(cell);
                     }
-                    grid.appendChild(cell);
                 }
             }
 
@@ -79,18 +81,18 @@
                 const index = Math.floor(Math.random() * 100);
                 const cell = grid.children[index];
                 cell.classList.add('black'); // Color the cell in black
-                selectedCell = { element: cell, row: Math.floor(index / 10), col: index % 10 };
+                selectedCell = { element: cell, row: 9 - Math.floor(index / 10), col: index % 10 };
             }
 
             function showSymbolInCell() {
                 const { element, row, col } = selectedCell;
-                element.textContent = symbols[col];
-                element.classList.add(colors[col]);
+                element.textContent = symbols[row];
+                element.classList.add('black');
             }
 
             function showOverlayMessage() {
                 const { row, col } = selectedCell;
-                overlay.textContent = `${colors[col]} ${symbols[col]}`;
+                overlay.textContent = `${colors[col]} ${symbols[row]}`;
                 overlay.style.display = 'block';
             }
 
