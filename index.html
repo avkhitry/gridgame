@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8"> <!-- Specify UTF-8 character encoding -->
     <title>Color Grid Game</title>
     <style>
         #grid {
@@ -21,15 +20,16 @@
             align-items: center;
             justify-content: center;
             font-size: 3vw;
+            visibility: visible; /* Default visibility */
         }
 
         .red { background-color: #ffcccc; }
         .orange { background-color: #ffe5cc; }
         .yellow { background-color: #ffffcc; }
         .green { background-color: #ccffcc; }
-        .blue { background-color: #86cefa; }
-        .deepblue { background-color: #73b9ee; }
-        .violet { background-color: #a387d7; }
+        .blue { background-color: #ccccff; }
+        .deepblue { background-color: #ccccff; }
+        .violet { background-color: #f2ccff; }
         .black { background-color: black; color: white; }
         .white { background-color: #f2f2f2; }
         .nocolor { background-color: #ffe6f0; }
@@ -42,16 +42,27 @@
             font-size: 24px;
             display: none;
         }
+
+        #modeButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div id="grid"></div>
     <div id="overlay"></div>
+    <button id="modeButton">Change Grid Mode</button>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const grid = document.getElementById('grid');
             const overlay = document.getElementById('overlay');
+            const modeButton = document.getElementById('modeButton');
             let tapCount = 0;
+            let gridMode = 0; // 0: Full grid, 1: Median lines, 2: Perimeter only
             let symbols = ["✒️", "👓", "🌂", "🍵", "🪗", "♟️", "⌚", "🪢", "🔬", "🌐"];
             let colors = ["red", "orange", "yellow", "green", "blue", "deepblue", "violet", "black", "white", "nocolor"];
             let selectedCell = null;
@@ -97,6 +108,34 @@
                 overlay.style.display = 'block';
             }
 
+            function updateGridVisibility() {
+                const cells = grid.querySelectorAll('.cell');
+                cells.forEach((cell, index) => {
+                    const row = Math.floor(index / 10);
+                    const col = index % 10;
+
+                    switch (gridMode) {
+                        case 0: // Full grid
+                            cell.style.visibility = 'visible';
+                            break;
+                        case 1: // Median lines and perimeter
+                            if (row === 4 || row === 5 || col === 4 || col === 5 || row === 0 || row === 9 || col === 0 || col === 9) {
+                                cell.style.visibility = 'visible';
+                            } else {
+                                cell.style.visibility = 'hidden';
+                            }
+                            break;
+                        case 2: // Perimeter only
+                            if (row === 0 || row === 9 || col === 0 || col === 9) {
+                                cell.style.visibility = 'visible';
+                            } else {
+                                cell.style.visibility = 'hidden';
+                            }
+                            break;
+                    }
+                });
+            }
+
             grid.addEventListener('click', function() {
                 tapCount++;
                 switch(tapCount) {
@@ -120,7 +159,13 @@
                 }
             });
 
+            modeButton.addEventListener('click', function() {
+                gridMode = (gridMode + 1) % 3;
+                updateGridVisibility();
+            });
+
             initializeGrid();
+            updateGridVisibility();
         });
     </script>
 </body>
