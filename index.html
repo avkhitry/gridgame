@@ -12,7 +12,7 @@
             background-color: #f0f0f0;
         }
         canvas {
-            border: 1px solid black;
+            border: 1px solid nocolor;
         }
     </style>
 </head>
@@ -29,15 +29,16 @@
         let cellSize;
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth * 0.9;
-            canvas.height = window.innerHeight * 0.9;
+            minDim = Math.min(window.innerWidth, window.innerHeight);
+            canvas.width = minDim * 0.8;
+            canvas.height = minDim * 0.8;
             cellSize = Math.min(canvas.width, canvas.height) / 10;
             drawGrid();
         }
 
         function drawGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.font = `${cellSize * 0.8}px Arial`;
+            ctx.font = `${cellSize * 0.5}px Arial`;
 
             for (let i = 0; i <= 10; i++) {
                 ctx.beginPath();
