@@ -12,15 +12,15 @@
             max-width: 600px;
             max-height: 600px;
             margin: 0 auto;
+            border: 2px solid black; /* Outer border of the grid */
         }
 
         .cell {
-            border: 1px solid black;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3vw;
-            visibility: visible; /* Default visibility */
+            border: 1px solid transparent; /* Make cell borders transparent initially */
         }
 
         .red { background-color: #ffcccc; }
@@ -62,7 +62,7 @@
             const overlay = document.getElementById('overlay');
             const modeButton = document.getElementById('modeButton');
             let tapCount = 0;
-            let gridMode = 0; // 0: Full grid, 1: Median lines, 2: Perimeter only
+            let gridMode = 0; // 0: Full grid, 1: Median lines and perimeter, 2: Perimeter only
             let symbols = ["✒️", "👓", "🌂", "🍵", "🪗", "♟️", "⌚", "🪢", "🔬", "🌐"];
             let colors = ["red", "orange", "yellow", "green", "blue", "deepblue", "violet", "black", "white", "nocolor"];
             let selectedCell = null;
@@ -117,6 +117,7 @@
                     switch (gridMode) {
                         case 0: // Full grid
                             cell.style.visibility = 'visible';
+                            cell.style.border = '1px solid transparent';
                             break;
                         case 1: // Median lines and perimeter
                             if (row === 4 || row === 5 || col === 4 || col === 5 || row === 0 || row === 9 || col === 0 || col === 9) {
@@ -124,40 +125,19 @@
                             } else {
                                 cell.style.visibility = 'hidden';
                             }
+                            cell.style.border = '1px solid transparent';
                             break;
                         case 2: // Perimeter only
+                            cell.style.visibility = 'visible';
                             if (row === 0 || row === 9 || col === 0 || col === 9) {
-                                cell.style.visibility = 'visible';
+                                cell.style.border = '1px solid black';
                             } else {
-                                cell.style.visibility = 'hidden';
+                                cell.style.border = '1px solid transparent';
                             }
                             break;
                     }
                 });
             }
-
-            grid.addEventListener('click', function() {
-                tapCount++;
-                switch(tapCount) {
-                    case 1:
-                        clearGrid();
-                        break;
-                    case 2:
-                        colorRandomCell();
-                        break;
-                    case 3:
-                        showSymbolInCell();
-                        break;
-                    case 4:
-                        showOverlayMessage();
-                        break;
-                    case 5:
-                        overlay.style.display = 'none';
-                        tapCount = 0;
-                        initializeGrid();
-                        break;
-                }
-            });
 
             modeButton.addEventListener('click', function() {
                 gridMode = (gridMode + 1) % 3;
