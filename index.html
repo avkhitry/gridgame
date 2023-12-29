@@ -4,8 +4,12 @@
     <title>Canvas Grid Game</title>
     <style>
         body {
-            text-align: center;
-            margin-top: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
         canvas {
             border: 1px solid black;
@@ -13,7 +17,7 @@
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <canvas id="gameCanvas"></canvas>
     <div>
         <button id="modeButton">Change Grid Mode</button>
     </div>
@@ -21,34 +25,52 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const symbols = ["✒️", "👓", "🌂", "🍵", "🪗", "♟️", "⌚", "🪢", "🔬", "🌐"];
-        const cellSize = 50;
         let gridMode = 0;
+        let cellSize;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth * 0.9;
+            canvas.height = window.innerHeight * 0.9;
+            cellSize = Math.min(canvas.width, canvas.height) / 10;
+            drawGrid();
+        }
 
         function drawGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `${cellSize * 0.8}px Arial`;
+
             for (let i = 0; i <= 10; i++) {
                 ctx.beginPath();
                 ctx.moveTo(i * cellSize, 0);
-                ctx.lineTo(i * cellSize, 500);
+                ctx.lineTo(i * cellSize, canvas.height);
                 ctx.moveTo(0, i * cellSize);
-                ctx.lineTo(500, i * cellSize);
-                ctx.strokeStyle = gridMode === 2 && i > 0 && i < 10 ? 'transparent' : 'black';
+                ctx.lineTo(canvas.width, i * cellSize);
+
+                let drawLine = true;
+                if (gridMode === 2) { // Perimeter only
+                    drawLine = (i === 0 || i === 10);
+                } else if (gridMode === 3) { // Median lines and perimeter
+                    drawLine = (i === 0 || i === 10 || i === 5);
+                }
+
+                ctx.strokeStyle = drawLine ? 'black' : 'transparent';
                 ctx.stroke();
             }
 
             if (gridMode < 2) {
                 for (let i = 0; i < 10; i++) {
-                    ctx.fillText(symbols[i], 5, (9.5 - i) * cellSize);
+                    ctx.fillText(symbols[i], cellSize * 0.1, (9.5 - i) * cellSize);
                 }
             }
         }
 
         document.getElementById('modeButton').addEventListener('click', () => {
-            gridMode = (gridMode + 1) % 3;
+            gridMode = (gridMode + 1) % 4; // Increase the mode count to 4
             drawGrid();
         });
 
-        drawGrid();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial resize and draw
     </script>
 </body>
 </html>
