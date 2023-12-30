@@ -56,12 +56,10 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw colored cells for mode 1
-            if (gridMode === 1) {
-                for (let col = 0; col < 10; col++) {
-                    for (let row = 0; row < 10; row++) {
-                        ctx.fillStyle = getCellColor(col);
-                        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-                    }
+            for (let col = 0; col < 10; col++) {
+                for (let row = 0; row < 10; row++) {
+                    ctx.fillStyle = getCellColor(col);
+                    ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
                 }
             }
 
@@ -77,17 +75,22 @@
             }
 
             // Draw symbols for modes 0 and 1
-            if (gridMode < 2) {
-                ctx.fillStyle = 'black'; // Color for the symbols
-                for (let i = 0; i < 10; i++) {
-                    ctx.fillText(symbols[i], cellSize * 0.1, (9.5 - i) * cellSize);
-                }
+            ctx.fillStyle = 'black'; // Color for the symbols
+            for (let i = 0; i < 10; i++) {
+                ctx.fillText(symbols[i], cellSize * 0.1, (9.5 - i) * cellSize);
             }
 
             // Highlight selected cell if exists
             if (selectedCell) {
                 ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'; // Yellow highlight
                 ctx.fillRect(selectedCell.col * cellSize, selectedCell.row * cellSize, cellSize, cellSize);
+            }
+
+            // Display message
+            if (message) {
+                ctx.fillStyle = 'black';
+                ctx.font = `${cellSize}px Arial`;
+                ctx.fillText(message, 10, canvas.height - 10);
             }
         }
 
@@ -103,24 +106,24 @@
             if (gridMode === 3) return (i === 0 || i === 10 || i === 5);
         }
 
-        function handleCanvasClick(event) {
+        function handleCanvasClick() {
             tapCount++;
             if (tapCount === 1) {
-                const rect = canvas.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                const y = event.clientY - rect.top;
-                const row = Math.floor(y / cellSize);
-                const col = Math.floor(x / cellSize);
+                // Randomly select a cell
+                const row = Math.floor(Math.random() * 10);
+                const col = Math.floor(Math.random() * 10);
                 selectedCell = { row, col };
-            } else if (tapCount === 2) {
-                if (selectedCell) {
-                    const colorName = colors[selectedCell.col];
-                    const symbolName = symbols[9 - selectedCell.row];
-                    alert(`Selected: ${colorName} ${symbolName}`);
-                }
+                message = '';
+            } else if (tapCount === 2 && selectedCell) {
+                // Display message
+                const colorName = colors[selectedCell.col];
+                const symbolName = symbols[9 - selectedCell.row];
+                message = `Selected: ${colorName} ${symbolName}`;
             } else {
+                // Reset
                 tapCount = 0;
                 selectedCell = null;
+                message = '';
             }
             drawGrid();
         }
