@@ -77,7 +77,7 @@
             // Draw symbols for modes 0 and 1
             ctx.fillStyle = 'black'; // Color for the symbols
             for (let i = 0; i < 10; i++) {
-                ctx.fillText(symbols[i], cellSize * 0.1, (9.5 - i) * cellSize);
+                ctx.fillText(symbols[i], cellSize * 0.5, (9.5 - i) * cellSize);
             }
 
             // Highlight selected cell if exists
@@ -89,7 +89,7 @@
             // Display message
             if (message) {
                 ctx.fillStyle = 'black';
-                ctx.font = `${cellSize}px Arial`;
+                ctx.font = `${cellSize * 0.5}px Arial`;
                 ctx.fillText(message, 10, canvas.height - 10);
             }
         }
