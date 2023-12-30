@@ -25,8 +25,11 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const symbols = ["✒️", "👓", "🌂", "🍵", "🪗", "♟️", "⌚", "🪢", "🔬", "🌐"];
+        const colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Deep Blue", "Violet", "Black", "White", "Translucent"];
         let gridMode = 0;
         let cellSize;
+        let tapCount = 0;
+        let selectedCell = null;
 
         const columnColors = [
             "#ffcccc", // Pale red
@@ -51,41 +54,75 @@
         
         function drawGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.font = `${cellSize * 0.5}px Arial`;
 
-            for (let col = 0; col < 10; col++) {
-                for (let row = 0; row < 10; row++) {
-                    if (gridMode === 1) {
-                        ctx.fillStyle = columnColors[col];
+            // Draw colored cells for mode 1
+            if (gridMode === 1) {
+                for (let col = 0; col < 10; col++) {
+                    for (let row = 0; row < 10; row++) {
+                        ctx.fillStyle = getCellColor(col);
                         ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
                     }
                 }
             }
 
+            // Draw grid lines
             for (let i = 0; i <= 10; i++) {
                 ctx.beginPath();
                 ctx.moveTo(i * cellSize, 0);
                 ctx.lineTo(i * cellSize, canvas.height);
                 ctx.moveTo(0, i * cellSize);
                 ctx.lineTo(canvas.width, i * cellSize);
-
-                let drawLine = true;
-                if (gridMode === 2) { // Perimeter only
-                    drawLine = (i === 0 || i === 10);
-                } else if (gridMode === 3) { // Median lines and perimeter
-                    drawLine = (i === 0 || i === 10 || i === 5);
-                }
-
-                ctx.strokeStyle = drawLine ? 'black' : 'transparent';
+                ctx.strokeStyle = shouldDrawLine(i) ? 'black' : 'transparent';
                 ctx.stroke();
             }
 
+            // Draw symbols for modes 0 and 1
             if (gridMode < 2) {
+                ctx.fillStyle = 'black'; // Color for the symbols
                 for (let i = 0; i < 10; i++) {
-                    ctx.fillStyle = 'black'; // Color for the symbols
                     ctx.fillText(symbols[i], cellSize * 0.1, (9.5 - i) * cellSize);
                 }
             }
+
+            // Highlight selected cell if exists
+            if (selectedCell) {
+                ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'; // Yellow highlight
+                ctx.fillRect(selectedCell.col * cellSize, selectedCell.row * cellSize, cellSize, cellSize);
+            }
+        }
+
+        function getCellColor(col) {
+            if (gridMode !== 1) return 'transparent';
+            return ['#ffcccc', '#ffe5cc', '#ffffcc', '#ccffcc', '#ccccff', '#9999ff', '#f2ccff', '#cccccc', '#f2f2f2', '#ffe6f0'][col];
+        }
+
+        function shouldDrawLine(i) {
+            if (gridMode === 0) return true;
+            if (gridMode === 1) return true;
+            if (gridMode === 2) return (i === 0 || i === 10);
+            if (gridMode === 3) return (i === 0 || i === 10 || i === 5);
+        }
+
+        function handleCanvasClick(event) {
+            tapCount++;
+            if (tapCount === 1) {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                const row = Math.floor(y / cellSize);
+                const col = Math.floor(x / cellSize);
+                selectedCell = { row, col };
+            } else if (tapCount === 2) {
+                if (selectedCell) {
+                    const colorName = colors[selectedCell.col];
+                    const symbolName = symbols[9 - selectedCell.row];
+                    alert(`Selected: ${colorName} ${symbolName}`);
+                }
+            } else {
+                tapCount = 0;
+                selectedCell = null;
+            }
+            drawGrid();
         }
 
         document.getElementById('modeButton').addEventListener('click', () => {
@@ -93,6 +130,7 @@
             drawGrid();
         });
 
+        canvas.addEventListener('click', handleCanvasClick);
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas(); // Initial resize and draw
     </script>
