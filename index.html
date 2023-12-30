@@ -91,7 +91,7 @@
 
             // Display message
             if (message) {
-                ctx.fillStyle = 'colorValues[selectedCell.col];
+                ctx.fillStyle = colorValues[selectedCell.col];
                 ctx.font = `${cellSize * 0.5}px Arial`;
                 ctx.fillText(message, 10, canvas.height - 10);
             }
