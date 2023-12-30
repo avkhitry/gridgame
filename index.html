@@ -41,7 +41,14 @@
             "#ffe6f0"  // Pale pink (for transparent)
         ];
 
-
+        function resizeCanvas() {
+            minDim = Math.min(window.innerWidth, window.innerHeight);
+            canvas.width = minDim * 0.8;
+            canvas.height = minDim * 0.8;
+            cellSize = Math.min(canvas.width, canvas.height) / 10;
+            drawGrid();
+        }
+        
         function drawGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.font = `${cellSize * 0.8}px Arial`;
