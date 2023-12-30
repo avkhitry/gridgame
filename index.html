@@ -19,7 +19,7 @@
 <body>
     <canvas id="gameCanvas"></canvas>
     <div>
-        <button id="modeButton">Change Grid Mode</button>
+        <button id="modeButton">Grid</button>
     </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -28,17 +28,32 @@
         let gridMode = 0;
         let cellSize;
 
-        function resizeCanvas() {
-            minDim = Math.min(window.innerWidth, window.innerHeight);
-            canvas.width = minDim * 0.8;
-            canvas.height = minDim * 0.8;
-            cellSize = Math.min(canvas.width, canvas.height) / 10;
-            drawGrid();
-        }
+        const columnColors = [
+            "#ffcccc", // Pale red
+            "#ffe5cc", // Pale orange
+            "#ffffcc", // Pale yellow
+            "#ccffcc", // Pale green
+            "#ccccff", // Pale light blue
+            "#9999ff", // Pale deep blue
+            "#f2ccff", // Pale violet
+            "#cccccc", // Grey (pale black)
+            "#f2f2f2", // Pale white
+            "#ffe6f0"  // Pale pink (for transparent)
+        ];
+
 
         function drawGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.font = `${cellSize * 0.5}px Arial`;
+            ctx.font = `${cellSize * 0.8}px Arial`;
+
+            for (let col = 0; col < 10; col++) {
+                for (let row = 0; row < 10; row++) {
+                    if (gridMode === 1) {
+                        ctx.fillStyle = columnColors[col];
+                        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
 
             for (let i = 0; i <= 10; i++) {
                 ctx.beginPath();
@@ -60,13 +75,14 @@
 
             if (gridMode < 2) {
                 for (let i = 0; i < 10; i++) {
+                    ctx.fillStyle = 'black'; // Color for the symbols
                     ctx.fillText(symbols[i], cellSize * 0.1, (9.5 - i) * cellSize);
                 }
             }
         }
 
         document.getElementById('modeButton').addEventListener('click', () => {
-            gridMode = (gridMode + 1) % 4; // Increase the mode count to 4
+            gridMode = (gridMode + 1) % 4;
             drawGrid();
         });
 
