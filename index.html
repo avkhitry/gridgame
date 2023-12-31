@@ -64,23 +64,10 @@
         let touchStartTime = 0; // To track when the touch started
         let isLongPress = false; // Flag to determine if the action is a long press
 
-        
         function changeGridMode() {
             gridMode = (gridMode + 1) % 4;
             drawGrid();
         }
-        
-        // canvas.addEventListener('mousedown', function() {
-        //     longPressTimer = setTimeout(changeGridMode, longPressDuration);
-        // });
-        
-        // canvas.addEventListener('mouseup', function() {
-        //     clearTimeout(longPressTimer);
-        // });
-        
-        // canvas.addEventListener('mouseout', function() {
-        //     clearTimeout(longPressTimer); // Cancel long press if the mouse leaves the canvas
-        // });
         
         function resizeCanvas() {
             minDim = Math.min(window.innerWidth, window.innerHeight);
@@ -118,7 +105,7 @@
             if (tapCount === 0) {
                 ctx.fillStyle = 'black'; // Color for the symbols
                 for (let i = 0; i < 10; i++) {
-                    ctx.fillText(symbols[i], cellSize * 0.5, (9.5 - i) * cellSize);
+                    ctx.fillText(symbols[i], cellSize * 0.2, (9.5 - i) * cellSize);
                 }
             }
 
@@ -225,7 +212,7 @@
         });
         canvas.addEventListener('touchcancel', endLongPress);
 
-        canvas.addEventListener('click', handleCanvasClick);
+        // canvas.addEventListener('click', handleCanvasClick);
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas(); // Initial resize and draw
     </script>
