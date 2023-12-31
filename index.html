@@ -39,7 +39,7 @@
         //const symbols = ["\u265F", "\u265E", "\u265D", "\u265C", "\u265B", "\u265A", "\u2659", "\u2658", "\u2657", "\u2656"];
         const colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Deep Blue", "Violet", "Black", "White", "Translucent"];
         const colorValues = ['#ffcccc', '#ffe5cc', '#ffffcc', '#ccffcc', '#ccccff', '#9999ff', '#f2ccff', '#cccccc', '#f2f2f2', '#ffe6f0'];
-        const colorValuesTxt = ['#FF0000', '#FF8C00', '#FFD700', '#008000', '#87CEEB', '#4682B4', '#663399', '#cccccc', '#f2f2f2', '#ffe6f0'];
+        const colorValuesTxt = ['#FF0000', '#FF8C00', '#FFD700', '#008000', '#87CEEB', '#4682B4', '#663399', '#000000', '#f2f2f2', '#ffe6f0'];
         let gridMode = 0;
         let cellSize;
         let tapCount = 0;
@@ -89,7 +89,7 @@
                 ctx.stroke();
             }
             // font size settings
-            ctx.font = (cellSize * 0.5) + 'px Arial'; // Set a larger font size for symbols
+            ctx.font = (cellSize * 0.5) + 'px Segoe UI Symbol'; // Set a larger font size for symbols
 
             // Draw symbols for modes 0 and 1
             if (tapCount === 0) {
