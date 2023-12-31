@@ -189,6 +189,10 @@
                 if (tapCount === 1) {
                     // Randomly select a cell
                     selectedCell = { row: Math.floor(Math.random() * 10), col: Math.floor(Math.random() * 10) };
+                } else if (tapCount === 2 && selectedCell) {
+                    // Display message - deprecated
+                    const colorName = colors[selectedCell.col];
+                    const symbolName = symbols[9 - selectedCell.row];
                 } else {
                     // Reset
                     tapCount = 0;
@@ -197,10 +201,10 @@
                 drawGrid();
             }
         }
-        // document.getElementById('modeButton').addEventListener('click', () => {
-        //     gridMode = (gridMode + 1) % 4;
-        //     drawGrid();
-        // });
+        document.getElementById('modeButton').addEventListener('click', () => {
+            gridMode = (gridMode + 1) % 4;
+            drawGrid();
+        });
 
         // Mouse events
         canvas.addEventListener('mousedown', startLongPress);
