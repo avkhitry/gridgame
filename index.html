@@ -18,9 +18,9 @@
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
-    <div>
+<!--     <div>
         <button id="modeButton">Grid</button>
-    </div>
+    </div> -->
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -57,7 +57,28 @@
             "#f2f2f2", // Pale white
             "#ffe6f0"  // Pale pink (for transparent)
         ];
-
+        
+        // for the long press instead of button
+        let longPressTimer;
+        const longPressDuration = 500; // Duration in milliseconds to consider as a long press
+    
+        function changeGridMode() {
+            gridMode = (gridMode + 1) % 4;
+            drawGrid();
+        }
+        
+        canvas.addEventListener('mousedown', function() {
+            longPressTimer = setTimeout(changeGridMode, longPressDuration);
+        });
+        
+        canvas.addEventListener('mouseup', function() {
+            clearTimeout(longPressTimer);
+        });
+        
+        canvas.addEventListener('mouseout', function() {
+            clearTimeout(longPressTimer); // Cancel long press if the mouse leaves the canvas
+        });
+        
         function resizeCanvas() {
             minDim = Math.min(window.innerWidth, window.innerHeight);
             canvas.width = minDim * 0.8;
@@ -145,10 +166,10 @@
             drawGrid();
         }
 
-        document.getElementById('modeButton').addEventListener('click', () => {
-            gridMode = (gridMode + 1) % 4;
-            drawGrid();
-        });
+        // document.getElementById('modeButton').addEventListener('click', () => {
+        //     gridMode = (gridMode + 1) % 4;
+        //     drawGrid();
+        // });
 
         canvas.addEventListener('click', handleCanvasClick);
         window.addEventListener('resize', resizeCanvas);
