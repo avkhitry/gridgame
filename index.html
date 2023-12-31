@@ -44,7 +44,6 @@
         let cellSize;
         let tapCount = 0;
         let selectedCell = null;
-        let message = '';
         
         const columnColors = [
             "#ffcccc", // Pale red
@@ -134,17 +133,14 @@
                 const row = Math.floor(Math.random() * 10);
                 const col = Math.floor(Math.random() * 10);
                 selectedCell = { row, col };
-                message = '';
             } else if (tapCount === 2 && selectedCell) {
-                // Display message
+                // Display message - deprecated
                 const colorName = colors[selectedCell.col];
                 const symbolName = symbols[9 - selectedCell.row];
-                // message = `Selected: ${colorName} ${symbolName}`;
             } else {
                 // Reset
                 tapCount = 0;
                 selectedCell = null;
-                message = '';
             }
             drawGrid();
         }
