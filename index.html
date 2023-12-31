@@ -26,14 +26,14 @@
         const ctx = canvas.getContext('2d');
         const symbols = [
             "\u2712\uFE0E", // Pen
-            "\u1F576\uFE0E", // Glasses (Note: This might still render as emoji)
+            "\u1F576\uDFB5\uFE0E", // Glasses (Note: This might still render as emoji)
             "\u2602\uFE0E", // Umbrella
             "\u2615\uFE0E", // Cup
             "🎧\uFE0E", // Harmonica (using a musical note)
             "\u265F\uFE0E", // Chess piece
             "\u231A\uFE0E", // Watch
             "\u27B0\uFE0E", // Rope (using a knot symbol)
-            "\u260E\uFE0E", // Microscope (Note: This might still render as emoji)
+            "\u260E\uFE0E", // Telephone (Note: This might still render as emoji)
             "🌐\uFE0E" // Sphere (using a blue circle, might render as emoji)
         ];
         //const symbols = ["\u265F", "\u265E", "\u265D", "\u265C", "\u265B", "\u265A", "\u2659", "\u2658", "\u2657", "\u2656"];
@@ -101,11 +101,14 @@
 
             // Highlight selected cell if exists
             if (selectedCell && tapCount == 1) {
-                ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'; // Yellow highlight
+                ctx.fillStyle = 'rgba(255, 255, 0, 0.7)'; // Yellow highlight
                 ctx.fillRect(selectedCell.col * cellSize, selectedCell.row * cellSize, cellSize, cellSize);
             }
             // Highlight selected cell and draw symbol if exists
             if (selectedCell && tapCount > 1) {
+                ctx.fillStyle = 'rgba(107, 107, 107, 0.9)'; // dark grey background so all is visible
+                ctx.fillRect(selectedCell.col * cellSize, selectedCell.row * cellSize, cellSize, cellSize);
+                
                 ctx.fillStyle = colorValuesTxt[selectedCell.col];
                 ctx.fillText(symbols[9 - selectedCell.row], selectedCell.col * cellSize + 0.2 * cellSize , (selectedCell.row + 1) * cellSize - 0.2 * cellSize);
                 // here to be fillRect for white and transparent cases
