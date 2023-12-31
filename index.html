@@ -98,16 +98,14 @@
             }
 
             // Highlight selected cell if exists
-            if (selectedCell) {
+            if (selectedCell && tapCount == 1) {
                 ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'; // Yellow highlight
                 ctx.fillRect(selectedCell.col * cellSize, selectedCell.row * cellSize, cellSize, cellSize);
             }
-
-            // Display message
-            if (message) {
-                ctx.fillStyle = colorValuesTxt[selectedCell.col];
-                ctx.font = `${cellSize * 0.5}px Segoe UI Symbol`;
-                ctx.fillText(message, 10, canvas.height - 10);
+            // Highlight selected cell and draw symbol if exists
+            if (selectedCell && tapCount >= 1) {
+                ctx.fillStyle = colorValues[selectedCell.col];
+                ctx.fillText(symbols[9 - selectedCell.row], selectedCell.col * cellSize, (selectedCell.row + 1) * cellSize);
             }
         }
 
