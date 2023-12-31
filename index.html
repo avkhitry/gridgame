@@ -78,6 +78,20 @@
         canvas.addEventListener('mouseout', function() {
             clearTimeout(longPressTimer); // Cancel long press if the mouse leaves the canvas
         });
+
+        function startLongPress(event) {
+            event.preventDefault(); // Prevent default behavior like text selection or context menu
+            longPressTimer = setTimeout(changeGridMode, longPressDuration);
+        }
+        
+        function endLongPress(event) {
+            event.preventDefault(); // Also prevent default behavior on touchend
+            clearTimeout(longPressTimer);
+        }
+        // Touch events
+        canvas.addEventListener('touchstart', startLongPress, { passive: false }); // Use passive: false to allow preventDefault
+        canvas.addEventListener('touchend', endLongPress);
+        canvas.addEventListener('touchcancel', endLongPress);
         
         function resizeCanvas() {
             minDim = Math.min(window.innerWidth, window.innerHeight);
