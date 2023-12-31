@@ -88,6 +88,8 @@
                 ctx.strokeStyle = shouldDrawLine(i) ? 'black' : 'transparent';
                 ctx.stroke();
             }
+            // font size settings
+            ctx.font = (cellSize * 0.5) + 'px Arial'; // Set a larger font size for symbols
 
             // Draw symbols for modes 0 and 1
             if (tapCount === 0) {
@@ -103,9 +105,10 @@
                 ctx.fillRect(selectedCell.col * cellSize, selectedCell.row * cellSize, cellSize, cellSize);
             }
             // Highlight selected cell and draw symbol if exists
-            if (selectedCell && tapCount >= 1) {
-                ctx.fillStyle = colorValues[selectedCell.col];
-                ctx.fillText(symbols[9 - selectedCell.row], selectedCell.col * cellSize, (selectedCell.row + 1) * cellSize);
+            if (selectedCell && tapCount > 1) {
+                ctx.fillStyle = colorValuesTxt[selectedCell.col];
+                ctx.fillText(symbols[9 - selectedCell.row], selectedCell.col * cellSize + 0.2 cellSize* , (selectedCell.row + 1) * cellSize - 0.2 cellSize);
+                // here to be fillRect for white and transparent cases
             }
         }
 
@@ -133,7 +136,7 @@
                 // Display message
                 const colorName = colors[selectedCell.col];
                 const symbolName = symbols[9 - selectedCell.row];
-                message = `Selected: ${colorName} ${symbolName}`;
+                // message = `Selected: ${colorName} ${symbolName}`;
             } else {
                 // Reset
                 tapCount = 0;
