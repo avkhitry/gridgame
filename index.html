@@ -201,10 +201,11 @@
                 drawGrid();
             }
         }
-        document.getElementById('modeButton').addEventListener('click', () => {
-            gridMode = (gridMode + 1) % 4;
-            drawGrid();
-        });
+        
+        // document.getElementById('modeButton').addEventListener('click', () => {
+        //     gridMode = (gridMode + 1) % 4;
+        //     drawGrid();
+        // });
 
         // Mouse events
         canvas.addEventListener('mousedown', startLongPress);
