@@ -107,7 +107,7 @@
             // Highlight selected cell and draw symbol if exists
             if (selectedCell && tapCount > 1) {
                 ctx.fillStyle = colorValuesTxt[selectedCell.col];
-                ctx.fillText(symbols[9 - selectedCell.row], selectedCell.col * cellSize + 0.2 cellSize* , (selectedCell.row + 1) * cellSize - 0.2 cellSize);
+                ctx.fillText(symbols[9 - selectedCell.row], selectedCell.col * cellSize + 0.2 * cellSize , (selectedCell.row + 1) * cellSize - 0.2 * cellSize);
                 // here to be fillRect for white and transparent cases
             }
         }
