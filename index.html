@@ -61,26 +61,29 @@
         // for the long press instead of button
         let longPressTimer;
         const longPressDuration = 500; // Duration in milliseconds to consider as a long press
-    
+        let touchStartTime = 0; // To track when the touch started
+
+        
         function changeGridMode() {
             gridMode = (gridMode + 1) % 4;
             drawGrid();
         }
         
-        canvas.addEventListener('mousedown', function() {
-            longPressTimer = setTimeout(changeGridMode, longPressDuration);
-        });
+        // canvas.addEventListener('mousedown', function() {
+        //     longPressTimer = setTimeout(changeGridMode, longPressDuration);
+        // });
         
-        canvas.addEventListener('mouseup', function() {
-            clearTimeout(longPressTimer);
-        });
+        // canvas.addEventListener('mouseup', function() {
+        //     clearTimeout(longPressTimer);
+        // });
         
-        canvas.addEventListener('mouseout', function() {
-            clearTimeout(longPressTimer); // Cancel long press if the mouse leaves the canvas
-        });
+        // canvas.addEventListener('mouseout', function() {
+        //     clearTimeout(longPressTimer); // Cancel long press if the mouse leaves the canvas
+        // });
 
         function startLongPress(event) {
-            event.preventDefault(); // Prevent default behavior like text selection or context menu
+            event.preventDefault();
+            touchStartTime = Date.now(); // Record the time when the touch started
             longPressTimer = setTimeout(changeGridMode, longPressDuration);
         }
         
@@ -88,10 +91,10 @@
             event.preventDefault(); // Also prevent default behavior on touchend
             clearTimeout(longPressTimer);
         }
-        // Touch events
-        canvas.addEventListener('touchstart', startLongPress, { passive: false }); // Use passive: false to allow preventDefault
-        canvas.addEventListener('touchend', endLongPress);
-        canvas.addEventListener('touchcancel', endLongPress);
+        // // Touch events
+        // canvas.addEventListener('touchstart', startLongPress, { passive: false }); // Use passive: false to allow preventDefault
+        // canvas.addEventListener('touchend', endLongPress);
+        // canvas.addEventListener('touchcancel', endLongPress);
         
         function resizeCanvas() {
             minDim = Math.min(window.innerWidth, window.innerHeight);
@@ -161,30 +164,57 @@
             if (gridMode === 3) return (i === 0 || i === 10 || i === 5);
         }
 
+        // function handleCanvasClick() {
+        //     tapCount++;
+        //     if (tapCount === 1) {
+        //         // Randomly select a cell
+        //         const row = Math.floor(Math.random() * 10);
+        //         const col = Math.floor(Math.random() * 10);
+        //         selectedCell = { row, col };
+        //     } else if (tapCount === 2 && selectedCell) {
+        //         // Display message - deprecated
+        //         const colorName = colors[selectedCell.col];
+        //         const symbolName = symbols[9 - selectedCell.row];
+        //     } else {
+        //         // Reset
+        //         tapCount = 0;
+        //         selectedCell = null;
+        //     }
+        //     drawGrid();
+        // }
         function handleCanvasClick() {
-            tapCount++;
-            if (tapCount === 1) {
-                // Randomly select a cell
-                const row = Math.floor(Math.random() * 10);
-                const col = Math.floor(Math.random() * 10);
-                selectedCell = { row, col };
-            } else if (tapCount === 2 && selectedCell) {
-                // Display message - deprecated
-                const colorName = colors[selectedCell.col];
-                const symbolName = symbols[9 - selectedCell.row];
-            } else {
-                // Reset
-                tapCount = 0;
-                selectedCell = null;
+            // Only increment tapCount if it's not a long press
+            if (Date.now() - touchStartTime < longPressDuration) {
+                tapCount++;
+                if (tapCount === 1) {
+                    // Randomly select a cell
+                    selectedCell = { row: Math.floor(Math.random() * 10), col: Math.floor(Math.random() * 10) };
+                } else {
+                    // Reset
+                    tapCount = 0;
+                    selectedCell = null;
+                }
+                drawGrid();
             }
-            drawGrid();
         }
-
         // document.getElementById('modeButton').addEventListener('click', () => {
         //     gridMode = (gridMode + 1) % 4;
         //     drawGrid();
         // });
 
+        // Mouse events
+        canvas.addEventListener('mousedown', startLongPress);
+        canvas.addEventListener('mouseup', handleCanvasClick); // Use handleCanvasClick here
+        canvas.addEventListener('mouseleave', endLongPress);
+        
+        // Touch events
+        canvas.addEventListener('touchstart', startLongPress, { passive: false });
+        canvas.addEventListener('touchend', function(event) {
+            endLongPress(event);
+            handleCanvasClick(); // Call handleCanvasClick on touchend as well
+        });
+        canvas.addEventListener('touchcancel', endLongPress);
+        
         canvas.addEventListener('click', handleCanvasClick);
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas(); // Initial resize and draw
